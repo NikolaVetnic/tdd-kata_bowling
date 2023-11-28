@@ -53,4 +53,33 @@ public class BowlingGameTest
         RollMany(12, 10);
         Game.Score().Should().Be(300);
     }
+
+    [Fact]
+    public void TestNoSpareOrStrikeInLastFrame()
+    {
+        RollMany(18, 0);
+        Game.Roll(3);
+        Game.Roll(4);
+        Game.Score().Should().Be(7);
+    }
+
+    [Fact]
+    public void TestSpareInLastFrame()
+    {
+        RollMany(18, 0);
+        Game.Roll(7);
+        Game.Roll(3);
+        Game.Roll(7);
+        Game.Score().Should().Be(17);
+    }
+
+    [Fact]
+    public void TestStrikeInLastFrame()
+    {
+        RollMany(18, 0);
+        Game.Roll(10);
+        Game.Roll(7);
+        Game.Roll(1);
+        Game.Score().Should().Be(18);
+    }
 }

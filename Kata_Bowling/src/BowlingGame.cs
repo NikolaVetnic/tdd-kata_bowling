@@ -9,10 +9,12 @@ public class BowlingGame
     {
         _rolls[_currentRoll] = i;
 
-        var isLastPossibleRoll = _currentRoll == 20;
         var isStrike = i == 10;
+        var isStrikeOnLastFrameRoll1 = _currentRoll == 18 && isStrike;
+        var isStrikeOnLastFrameRoll2 = _currentRoll == 19 && isStrike;
+        var isLastPossibleRoll = _currentRoll == 20;
 
-        _currentRoll += isLastPossibleRoll ? 0 : isStrike ? 2 : 1;
+        _currentRoll += isLastPossibleRoll ? 0 : isStrike && !isStrikeOnLastFrameRoll1 && !isStrikeOnLastFrameRoll2 ? 2 : 1;
     }
 
     public int Score()
@@ -48,8 +50,9 @@ public class BowlingGame
 
         var isStrike = _rolls[currentRoll] == 10;
         var isSpare = !isStrike && _rolls[currentRoll] + _rolls[currentRoll + 1] == 10;
+        var isLastRoll = currentRoll == 18;
 
-        if (isSpare)
+        if (isSpare && !isLastRoll)
             bonus = _rolls[currentRoll + 2];
 
         return bonus;
@@ -58,8 +61,9 @@ public class BowlingGame
     private int ApplyStrikeBonus(int currentRoll)
     {
         var isStrike = _rolls[currentRoll] == 10;
+        var isLastRoll = currentRoll == 18;
 
-        if (!isStrike)
+        if (!isStrike || isLastRoll)
             return 0;
 
         var isTwoStrikesInRow = isStrike && _rolls[currentRoll + 2] == 10;
